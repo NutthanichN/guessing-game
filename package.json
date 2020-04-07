@@ -1,0 +1,24 @@
+{
+  "name": "guessing-game",
+  "version": "1.0.0",
+  "description": "Guessing Game web application using MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NutthanichN/guessing-game.git"
+  },
+  "author": "Nutthanich Narphromar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NutthanichN/guessing-game/issues"
+  },
+  "homepage": "https://github.com/NutthanichN/guessing-game#readme",
+  "dependencies": {
+    "ejs": "^3.0.2",
+    "express": "^4.17.1",
+    "mongodb": "^3.5.5"
+  }
+}
