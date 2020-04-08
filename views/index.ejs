@@ -1,6 +1,40 @@
 <!DOCTYPE html>
 <html>
     <h1>
-        Hello Node JS world!
+        Alphabet Guessing Game
     </h1>
+    <p>Adapt from PHP version by Nutthanich Narphromar 6110545490</p>
+
+    <h2>Please choose A, B, C or D to guess the character</h2>
+    
+    <% if (question) { %>
+      <h3>Question: 
+        <%= question %>
+      </h3>
+    <% } %>
+
+    <h3>Character(s) remaining: 
+        <% if (guessing) { %>
+            <%= guessing %>
+        <% } %>
+    </h3>
+
+    <h3>Answer: 
+      <% if (answer) { %>
+        <% for(var i=0; i < answer.length; i++) { %>
+            <%= answer[i] %> 
+        <% } %>
+      <% } %>
+    </h3>
+
+    <h3>Choose: 
+        <button>A</button>
+        <button>B</button>
+        <button>C</button>
+        <button>D</button>
+    </h3>
+
+    <p>Miss: 
+    </p>
+
 </html>
