@@ -31,18 +31,53 @@ client.connect(function(err) {
 
   app.get('/', (req, res) => {
     
-    // if there's col_game
-    col.findOne({state: 1}, (err, doc) => {
+    col.findOne({state: 1}, function(err, doc) {
       assert.equal(null, err);
-      // console.log(doc);
+      // if there's col_game
       if (doc !== null) {
+        console.log("Found document.")
         // change page part
-        renderIndex(res, doc, "first");
+        switch (doc.step) {
+          case 0:
+            renderIndex(res, doc, "first");
+            break;
+          case 1:
+            renderIndex(res, doc, "second");
+            break;
+          case 2:
+            renderIndex(res, doc, "third");
+            break;
+          case 3:
+            renderIndex(res, doc, "last");
+            break;
+          case 4:
+          case 5:
+          case 6:
+          case 7:
+          default:
+            renderIndex(res, doc, "");
+        }
+        
       }
       else {
         // else: insert + refresh (using start button)
-        console.log("No document.")
-        res.send("No required document.")
+        var newGameDoc = {
+          state: 1,
+          question: ["_", "_", "_", "_"],
+          guessing: ["*", "*", "*", "*"],
+          answer: [],
+          score: 0,
+          fail: 0,
+          step: 0,
+          gameStart: null,
+          gameStop: null
+        }
+        col.insertOne(newGameDoc, function(err, r) {
+          assert.equal(null, err);
+          assert.equal(1, r.insertedCount);
+          console.log("Insert new document.")
+        });
+        renderStartPage(res);
       }
     });
 
@@ -58,7 +93,20 @@ client.connect(function(err) {
       question: doc.question.join(" "), 
       guessing: doc.guessing.join(" "), 
       answer: doc.answer, 
-      fail: doc.fail
+      fail: doc.fail,
+      startButton: false
+    });
+  }
+
+  function renderStartPage(res) {
+    res.render('index', {
+      charOrder: null,
+      question: null,
+      question: null, 
+      guessing: null, 
+      answer: null, 
+      fail: null,
+      startButton: true
     });
   }
 
