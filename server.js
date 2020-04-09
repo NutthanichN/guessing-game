@@ -51,11 +51,20 @@ client.connect(function(err) {
             renderSetQuestionPage(res, doc, "last");
             break;
           case 4:
+            renderAnswerPage(res, doc, "first");
+            break;
           case 5:
+            renderAnswerPage(res, doc, "second");
+            break;
           case 6:
+            renderAnswerPage(res, doc, "third");
+            break;
           case 7:
+            renderAnswerPage(res, doc, "last");
+            break;
           default:
-            renderAnswerPage(res, doc, "");
+            // game over + show score + retry button
+            renderScorePage(res, doc);
         }
         
       }
@@ -101,7 +110,7 @@ client.connect(function(err) {
 
   function renderSetQuestionPage(res, doc, charOrder) {
     res.render('index', {
-      mode: "select",
+      mode: "add",
       charOrder: charOrder,
       question: doc.question.join(" "), 
       guessing: null, 
@@ -116,11 +125,16 @@ client.connect(function(err) {
       mode: null,
       charOrder: null,
       question: null,
-      question: null, 
       guessing: null, 
       answer: null, 
       miss: null,
       startButton: true
+    });
+  }
+
+  function renderScorePage(res, doc) {
+    res.render('score', {
+      score: 0
     });
   }
 
