@@ -39,23 +39,23 @@ client.connect(function(err) {
         // change page part
         switch (doc.step) {
           case 0:
-            renderIndex(res, doc, "first");
+            renderSetQuestionPage(res, doc, "first");
             break;
           case 1:
-            renderIndex(res, doc, "second");
+            renderSetQuestionPage(res, doc, "second");
             break;
           case 2:
-            renderIndex(res, doc, "third");
+            renderSetQuestionPage(res, doc, "third");
             break;
           case 3:
-            renderIndex(res, doc, "last");
+            renderSetQuestionPage(res, doc, "last");
             break;
           case 4:
           case 5:
           case 6:
           case 7:
           default:
-            renderIndex(res, doc, "");
+            renderAnswerPage(res, doc, "");
         }
         
       }
@@ -87,25 +87,39 @@ client.connect(function(err) {
       // submit question / answer part
   });
 
-  function renderIndex(res, doc, charOrder) {
+  function renderAnswerPage(res, doc, charOrder) {
     res.render('index', {
+      mode: "guess",
       charOrder: charOrder,
       question: doc.question.join(" "), 
       guessing: doc.guessing.join(" "), 
-      answer: doc.answer, 
-      fail: doc.fail,
+      answer: doc.answer.join(" "), 
+      miss: doc.fail.toString(),
+      startButton: false
+    });
+  }
+
+  function renderSetQuestionPage(res, doc, charOrder) {
+    res.render('index', {
+      mode: "select",
+      charOrder: charOrder,
+      question: doc.question.join(" "), 
+      guessing: null, 
+      answer: null, 
+      miss: null,
       startButton: false
     });
   }
 
   function renderStartPage(res) {
     res.render('index', {
+      mode: null,
       charOrder: null,
       question: null,
       question: null, 
       guessing: null, 
       answer: null, 
-      fail: null,
+      miss: null,
       startButton: true
     });
   }
