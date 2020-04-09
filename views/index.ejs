@@ -9,11 +9,15 @@
     <% if (startButton) { %>
       <a href="">Start</a>
     <% } else { %>
-      <h2>Please choose A, B, C or D to guess the 
+      <h2>Please choose A, B, C or D to 
+        <% if (mode) { %>
+          <%= mode %>
+        <% } %>
+         the 
         <% if (charOrder) { %>
           <%= charOrder %>
         <% } %>
-        character
+         character
       </h2>
       
       <% if (question) { %>
@@ -22,19 +26,14 @@
         </h3>
       <% } %>
 
-      <h3>Character(s) remaining: 
-          <% if (guessing) { %>
-              <%= guessing %>
-          <% } %>
-      </h3>
-
-      <h3>Answer: 
-        <% if (answer) { %>
-          <% for(var i=0; i < answer.length; i++) { %>
-              <%= answer[i] %> 
-          <% } %>
-        <% } %>
-      </h3>
+      <% if (guessing) { %>
+        <h3>Character(s) remaining: <%= guessing %></h3>
+      <% } %>
+      
+      <% if (answer) { %>
+        <h3>Answer: <%= answer %></h3>
+      <% } %>
+      
 
       <h3>Choose: 
           <button>A</button>
@@ -43,7 +42,10 @@
           <button>D</button>
       </h3>
 
-      <p>Miss: </p>
+      <% if (miss) { %>
+        <p>Miss: <%= miss %></p>
+      <% } %>
+      
     <% } %>
   </body>
 </html>
