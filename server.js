@@ -30,43 +30,37 @@ client.connect(function(err) {
   app.set('view engine', 'ejs')
 
   app.get('/', (req, res) => {
-    // Get documents that match the query
-    // col.find({}).toArray(function(err, docs) {
-    //   assert.equal(null, err);
-    //   // res.send(JSON.stringify(docs));
-    //   // client.close();
-    // });
-
+    
+    // if there's col_game
     col.findOne({state: 1}, (err, doc) => {
       assert.equal(null, err);
-      // getDBVariable(doc);
-      var state = doc.state;
-      var question = doc.question;
-      var question = question.join(" ");
-      var guessing = doc.guessing;
-      var guessing = doc.guessing;
-      var guessing = guessing.join(" ");
-      var answer = doc.answer;
-      var score = doc.score;
-      var fail = doc.fail;
-      var step = doc.step;
-      // console.log(doc.question);
-      // console.log(doc.answer);
-      // console.log(doc.guessing);
-
-      // res.send(JSON.stringify(doc));
-      // client.close();
-      res.render('index', {
-        question: question, guessing: guessing, 
-        answer: answer, fail: fail
-      });
-
+      // console.log(doc);
+      if (doc !== null) {
+        // change page part
+        renderIndex(res, doc, "first");
+      }
+      else {
+        // else: insert + refresh (using start button)
+        console.log("No document.")
+        res.send("No required document.")
+      }
     });
+
   });
 
-//   app.post('/', (req, res) => {
-//       // post request -> update database and render
-//   });
+  app.post('/', (req, res) => {
+      // submit question / answer part
+  });
+
+  function renderIndex(res, doc, charOrder) {
+    res.render('index', {
+      charOrder: charOrder,
+      question: doc.question.join(" "), 
+      guessing: doc.guessing.join(" "), 
+      answer: doc.answer, 
+      fail: doc.fail
+    });
+  }
 
 });
 

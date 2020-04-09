@@ -5,7 +5,12 @@
     </h1>
     <p>Adapt from PHP version by Nutthanich Narphromar 6110545490</p>
 
-    <h2>Please choose A, B, C or D to guess the character</h2>
+    <h2>Please choose A, B, C or D to guess the 
+      <% if (charOrder) { %>
+        <%= charOrder %>
+      <% } %>
+      character
+    </h2>
     
     <% if (question) { %>
       <h3>Question: 
