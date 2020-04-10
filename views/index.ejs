@@ -22,16 +22,9 @@
         </h2>
         
         <% if (question) { %>
-          <h3>Question: 
-            <%= question %>
-          </h3>
-        <% } %>
-
-        <% if (answer) { %>
+          <h3>Question: <%= question %></h3>
+        <% } else {%>
           <h3>Answer: <%= answer %></h3>
-        <% } %>
-  
-        <% if (guessing) { %>
           <h3>Character(s) remaining: <%= guessing %></h3>
         <% } %>
 
@@ -42,10 +35,10 @@
             <button type="submit" name="questioning" value="C">C</button>
             <button type="submit" name="questioning" value="D">D</button>
           <% } else { %>
-            <button type="submit" name="answering" value="A">aA</button>
-            <button type="submit" name="answering" value="B">bB</button>
-            <button type="submit" name="answering" value="C">cC</button>
-            <button type="submit" name="answering" value="D">dD</button>
+            <button type="submit" name="answering" value="A">A</button>
+            <button type="submit" name="answering" value="B">B</button>
+            <button type="submit" name="answering" value="C">C</button>
+            <button type="submit" name="answering" value="D">D</button>
           <% } %>
           </h3>
   
@@ -54,5 +47,6 @@
         <% } %>
       </form>
     <% } %>
+    
   </body>
 </html>

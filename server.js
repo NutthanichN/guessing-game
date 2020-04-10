@@ -20,7 +20,7 @@ const HOST = '127.0.0.1';
 // App
 const app = express();
 app.set('view engine', 'ejs');
-app.use(bodyParser.json());       // to support JSON-encoded bodies
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 // Use connect method to connect to the Server
@@ -32,16 +32,12 @@ client.connect(function(err) {
   const col = db.collection(dbCollection);
 
   app.get('/', (req, res) => {
-    
     col.findOne({state: 1}, function(err, doc) {
       assert.equal(null, err);
-      // if there's col_game
       if (doc !== null) {
-        console.log("Found document.")
         // change page part
         switch (doc.step) {
           case 0:
-            // renderAnswerPage(res, doc, "Test");
             renderQuestionPage(res, doc, "first");
             break;
           case 1:
@@ -67,12 +63,11 @@ client.connect(function(err) {
             break;
           default:
             // game over + show score + retry button
+            console.log("Game ends");
             renderScorePage(res, doc);
         }
-        
       }
       else {
-        // else: insert + refresh (using start button)
         var newGameDoc = {
           state: 1,
           question: ["_", "_", "_", "_"],
@@ -87,35 +82,53 @@ client.connect(function(err) {
         col.insertOne(newGameDoc, function(err, r) {
           assert.equal(null, err);
           assert.equal(1, r.insertedCount);
-          console.log("Insert new document.")
+          console.log("Inserted new document")
         });
         renderStartPage(res);
       }
     });
-
   });
 
   app.post('/', (req, res) => {
-      // submit question / answer part
-      console.log(req.body);
-
       if (req.body.questioning) {
         var choose = req.body.questioning;
-        col.updateOne({state: 1, question: "_"}, {$set: {'question.$': choose}, $inc: {step: 1}}, 
-          function(err, r) {
-            assert.equal(null, err);
-            // assert.equal(1, r.upsertedCount);
-            console.log("Update question");
+        var questionUpdate = {
+          $set: {'question.$': choose}, 
+          $inc: {step: 1}
+        };
+        col.updateOne({state: 1, question: "_"}, questionUpdate, function(err, r) {
+          assert.equal(null, err);
+          assert.equal(1, r.matchedCount);
+          assert.equal(1, r.modifiedCount);
         });
-        // console.log("Submit question");
-        // console.log(req.body.questioning);
       }
 
       if (req.body.answering) {
-        console.log("Submit answer");
-        console.log(req.body.answering);
+        var choose = req.body.answering;
+        col.findOne({state: 1}, function(err, doc) {
+          assert.equal(null, err);
+          var index = doc.step - 4;
+          // success case
+          if (doc.question[index] === choose) {
+            var updatedDoc = {
+              $push: {answer: choose}, 
+              $pop: {guessing: 1},
+              $inc: {step: 1}
+            };
+          }
+          // fail case
+          else {
+            var updatedDoc = {
+              $inc: {fail: 1}
+            };
+          }
+          col.updateOne({state: 1}, updatedDoc, function(err, r) {
+            assert.equal(null, err);
+            assert.equal(1, r.matchedCount);
+            assert.equal(1, r.modifiedCount);
+          });
+        });
       }
-
       res.redirect("/");
   });
 
@@ -125,8 +138,7 @@ client.connect(function(err) {
       charOrder: charOrder,
       question: null, 
       guessing: doc.guessing.join(" "), 
-      answer: "<insert answers here>",
-      // answer: doc.answer.join(" "), 
+      answer: doc.answer.join(" "), 
       miss: doc.fail.toString(),
       startButton: false
     });
