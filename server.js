@@ -122,6 +122,16 @@ client.connect(function(err) {
               $inc: {fail: 1}
             };
           }
+
+          // record date
+          if (index === 0 && doc.fail === 0) {
+            updatedDoc["$set"] = {gameStart: new Date()};
+          }
+          else if (index === 3) {
+            updatedDoc["$set"] = {gameStop: new Date()};
+          }
+
+          // console.log(updatedDoc);
           col.updateOne({state: 1}, updatedDoc, function(err, r) {
             assert.equal(null, err);
             assert.equal(1, r.matchedCount);
