@@ -179,8 +179,17 @@ client.connect(function(err) {
   }
 
   function renderScorePage(res, doc) {
+    let duration = doc.gameStop - doc.gameStart;
+    let durationSec = duration / 1000;
+    let score = (4 * 1000)-(durationSec * 100)-(doc.fail * 100);
+    // let durationText = new Date(duration);
     res.render('score', {
-      score: 0
+      start: doc.gameStart,
+      end: doc.gameStop,
+      miss: doc.fail,
+      durationSec: durationSec,
+      durationText: null,
+      score: score
     });
   }
 

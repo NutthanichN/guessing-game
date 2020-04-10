@@ -1,7 +1,41 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <style>
+          span {
+            font-weight:normal
+          }
+        </style>
+    </head>
     <body>
-        <h1>You Win</h1>
+        <h1>Alphabet Guessing Game</h1>
+        <p>Adapt from PHP version by Nutthanich Narphromar 6110545490</p>
+        <br>
+
+        <h1 style="text-align:center">You Win!!!</h1>
+        <h3>Start: 
+          <span><%= start %></span>
+        </h3>
+
+        <h3>End: 
+          <span><%= end %></span>
+        </h3>
+
+        <h3>Miss: 
+          <span><%= miss %></span>
+        </h3>
+
+        <h3>Duration (secs): 
+          <span><%= durationSec %></span>
+        </h3>
+
+        <!-- <h3>Duration (text): 
+          <span><%= durationText %></span>
+        </h3> -->
+
+        <h3>Score: 
+          <span><%= score %></span>
+        </h3>
 
         <form action="" method="GET">
             <button type="submit">Retry</button>
