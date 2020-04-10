@@ -7,7 +7,10 @@
     <p>Adapt from PHP version by Nutthanich Narphromar 6110545490</p>
 
     <% if (startButton) { %>
-      <a href="">Start</a>
+      <form action="" method="GET">
+        <button type="submit">Start</button>
+      </form>
+      <!-- <a href="">Start</a> -->
     <% } else { %>
       <form action="", method="POST">
         <h2>Please choose A, B, C or D to 
@@ -47,6 +50,6 @@
         <% } %>
       </form>
     <% } %>
-    
+
   </body>
 </html>

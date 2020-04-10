@@ -73,7 +73,7 @@ client.connect(function(err) {
           question: ["_", "_", "_", "_"],
           guessing: ["*", "*", "*", "*"],
           answer: [],
-          score: 0,
+          score: [],
           fail: 0,
           step: 0,
           gameStart: null,
