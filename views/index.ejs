@@ -9,43 +9,49 @@
     <% if (startButton) { %>
       <a href="">Start</a>
     <% } else { %>
-      <h2>Please choose A, B, C or D to 
-        <% if (mode) { %>
-          <%= mode %>
+      <form action="", method="POST">
+        <h2>Please choose A, B, C or D to 
+          <% if (mode) { %>
+            <%= mode %>
+          <% } %>
+           the 
+          <% if (charOrder) { %>
+            <%= charOrder %>
+          <% } %>
+           character
+        </h2>
+        
+        <% if (question) { %>
+          <h3>Question: 
+            <%= question %>
+          </h3>
         <% } %>
-         the 
-        <% if (charOrder) { %>
-          <%= charOrder %>
+  
+        <% if (guessing) { %>
+          <h3>Character(s) remaining: <%= guessing %></h3>
         <% } %>
-         character
-      </h2>
-      
-      <% if (question) { %>
-        <h3>Question: 
-          <%= question %>
+        
+        <% if (answer) { %>
+          <h3>Answer: <%= answer %></h3>
+        <% } %>
+        
+  
+        <h3>Choose: 
+            <button type="submit" name="questioning" value="A">A</button>
+            <button type="submit" name="questioning" value="B">B</button>
+            <button type="submit" name="questioning" value="C">C</button>
+            <button type="submit" name="questioning" value="D">D</button>
+            <br>
+            <button type="submit" name="answering" value="A">aA</button>
+            <button type="submit" name="answering" value="B">bB</button>
+            <button type="submit" name="answering" value="C">cC</button>
+            <button type="submit" name="answering" value="D">dD</button>
         </h3>
-      <% } %>
-
-      <% if (guessing) { %>
-        <h3>Character(s) remaining: <%= guessing %></h3>
-      <% } %>
-      
-      <% if (answer) { %>
-        <h3>Answer: <%= answer %></h3>
-      <% } %>
-      
-
-      <h3>Choose: 
-          <button>A</button>
-          <button>B</button>
-          <button>C</button>
-          <button>D</button>
-      </h3>
-
-      <% if (miss) { %>
-        <p>Miss: <%= miss %></p>
-      <% } %>
-      
+  
+        <% if (miss) { %>
+          <p>Miss: <%= miss %></p>
+        <% } %>
+      </form>
     <% } %>
   </body>
 </html>

@@ -3,6 +3,7 @@ const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 const ejs = require('ejs');
+const bodyParser = require('body-parser');
 // Connection URL
 const url = 'mongodb://localhost:27017';
 
@@ -18,6 +19,9 @@ const HOST = '127.0.0.1';
 
 // App
 const app = express();
+app.set('view engine', 'ejs');
+app.use(bodyParser.json());       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({extended: true}));
 
 // Use connect method to connect to the Server
 client.connect(function(err) {
@@ -26,8 +30,6 @@ client.connect(function(err) {
 
   const db = client.db(dbName);
   const col = db.collection(dbCollection);
-
-  app.set('view engine', 'ejs')
 
   app.get('/', (req, res) => {
     
@@ -39,16 +41,16 @@ client.connect(function(err) {
         // change page part
         switch (doc.step) {
           case 0:
-            renderSetQuestionPage(res, doc, "first");
+            renderQuestionPage(res, doc, "first");
             break;
           case 1:
-            renderSetQuestionPage(res, doc, "second");
+            renderQuestionPage(res, doc, "second");
             break;
           case 2:
-            renderSetQuestionPage(res, doc, "third");
+            renderQuestionPage(res, doc, "third");
             break;
           case 3:
-            renderSetQuestionPage(res, doc, "last");
+            renderQuestionPage(res, doc, "last");
             break;
           case 4:
             renderAnswerPage(res, doc, "first");
@@ -94,6 +96,17 @@ client.connect(function(err) {
 
   app.post('/', (req, res) => {
       // submit question / answer part
+      console.log(req.body);
+
+      if (req.body.questioning) {
+        console.log("Submit question");
+        console.log(req.body.questioning);
+      }
+      if (req.body.answering) {
+        console.log("Submit answer");
+        console.log(req.body.answering);
+      }
+      res.redirect("/");
   });
 
   function renderAnswerPage(res, doc, charOrder) {
@@ -108,7 +121,7 @@ client.connect(function(err) {
     });
   }
 
-  function renderSetQuestionPage(res, doc, charOrder) {
+  function renderQuestionPage(res, doc, charOrder) {
     res.render('index', {
       mode: "add",
       charOrder: charOrder,
