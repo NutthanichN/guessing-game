@@ -41,6 +41,7 @@ client.connect(function(err) {
         // change page part
         switch (doc.step) {
           case 0:
+            // renderAnswerPage(res, doc, "Test");
             renderQuestionPage(res, doc, "first");
             break;
           case 1:
@@ -82,7 +83,7 @@ client.connect(function(err) {
           step: 0,
           gameStart: null,
           gameStop: null
-        }
+        };
         col.insertOne(newGameDoc, function(err, r) {
           assert.equal(null, err);
           assert.equal(1, r.insertedCount);
@@ -99,23 +100,33 @@ client.connect(function(err) {
       console.log(req.body);
 
       if (req.body.questioning) {
-        console.log("Submit question");
-        console.log(req.body.questioning);
+        var choose = req.body.questioning;
+        col.updateOne({state: 1, question: "_"}, {$set: {'question.$': choose}, $inc: {step: 1}}, 
+          function(err, r) {
+            assert.equal(null, err);
+            // assert.equal(1, r.upsertedCount);
+            console.log("Update question");
+        });
+        // console.log("Submit question");
+        // console.log(req.body.questioning);
       }
+
       if (req.body.answering) {
         console.log("Submit answer");
         console.log(req.body.answering);
       }
+
       res.redirect("/");
   });
 
   function renderAnswerPage(res, doc, charOrder) {
     res.render('index', {
-      mode: "guess",
+      modeStr: "guess",
       charOrder: charOrder,
-      question: doc.question.join(" "), 
+      question: null, 
       guessing: doc.guessing.join(" "), 
-      answer: doc.answer.join(" "), 
+      answer: "<insert answers here>",
+      // answer: doc.answer.join(" "), 
       miss: doc.fail.toString(),
       startButton: false
     });
@@ -123,7 +134,7 @@ client.connect(function(err) {
 
   function renderQuestionPage(res, doc, charOrder) {
     res.render('index', {
-      mode: "add",
+      modeStr: "add",
       charOrder: charOrder,
       question: doc.question.join(" "), 
       guessing: null, 
@@ -135,7 +146,7 @@ client.connect(function(err) {
 
   function renderStartPage(res) {
     res.render('index', {
-      mode: null,
+      modeStr: null,
       charOrder: null,
       question: null,
       guessing: null, 

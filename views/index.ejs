@@ -11,8 +11,8 @@
     <% } else { %>
       <form action="", method="POST">
         <h2>Please choose A, B, C or D to 
-          <% if (mode) { %>
-            <%= mode %>
+          <% if (modeStr) { %>
+            <%= modeStr %>
           <% } %>
            the 
           <% if (charOrder) { %>
@@ -26,27 +26,28 @@
             <%= question %>
           </h3>
         <% } %>
+
+        <% if (answer) { %>
+          <h3>Answer: <%= answer %></h3>
+        <% } %>
   
         <% if (guessing) { %>
           <h3>Character(s) remaining: <%= guessing %></h3>
         <% } %>
-        
-        <% if (answer) { %>
-          <h3>Answer: <%= answer %></h3>
-        <% } %>
-        
-  
+
         <h3>Choose: 
+          <% if (question) { %>
             <button type="submit" name="questioning" value="A">A</button>
             <button type="submit" name="questioning" value="B">B</button>
             <button type="submit" name="questioning" value="C">C</button>
             <button type="submit" name="questioning" value="D">D</button>
-            <br>
+          <% } else { %>
             <button type="submit" name="answering" value="A">aA</button>
             <button type="submit" name="answering" value="B">bB</button>
             <button type="submit" name="answering" value="C">cC</button>
             <button type="submit" name="answering" value="D">dD</button>
-        </h3>
+          <% } %>
+          </h3>
   
         <% if (miss) { %>
           <p>Miss: <%= miss %></p>
