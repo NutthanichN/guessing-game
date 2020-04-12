@@ -62,7 +62,6 @@ client.connect(function(err) {
             renderAnswerPage(res, doc, "last");
             break;
           default:
-            // game over + show score + retry button
             console.log("Game ends");
             let duration = doc.gameStop - doc.gameStart;
             let durationSec = duration / 1000;
@@ -77,7 +76,6 @@ client.connect(function(err) {
             history.push(score);
             history.sort(function(a, b) {return b - a});
             history = history.slice(0, 5);
-            console.log(history);
             res.render('score', {
               start: doc.gameStart,
               end: doc.gameStop,
