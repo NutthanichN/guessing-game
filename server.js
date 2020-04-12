@@ -64,7 +64,59 @@ client.connect(function(err) {
           default:
             // game over + show score + retry button
             console.log("Game ends");
-            renderScorePage(res, doc);
+            let duration = doc.gameStop - doc.gameStart;
+            let durationSec = duration / 1000;
+            let score = (4 * 1000)-(durationSec * 100)-(doc.fail * 100);
+            score = Math.round(score);
+            // let durationText = new Date(duration);
+            
+            let history = doc.score;
+            history = history.map(function(value, index){
+              return value["score"];
+            });
+            history.push(score);
+            history.sort(function(a, b) {return b - a});
+            history = history.slice(0, 5);
+            console.log(history);
+            res.render('score', {
+              start: doc.gameStart,
+              end: doc.gameStop,
+              miss: doc.fail,
+              durationSec: durationSec,
+              durationText: null,
+              score: score,
+              top_5: history.join(" > ")
+            });
+
+            let gameOverUpdate = {
+              $push: {
+                score: {
+                  $each: [{
+                    score: score,
+                    fail: doc.fail,
+                    duration_sec: durationSec,
+                    date: new Date()
+                  }],
+                  $sort: {score: -1},
+                  $slice: 5
+                }
+              },
+              $set: {
+                question: ["_","_","_","_"],
+                guessing: ["*","*","*","*"],
+                answer: [],
+                fail: 0,
+                step: 0,
+                gameStart: null,
+                gameStop: null
+              }
+            }
+
+            col.updateOne({state: 1}, gameOverUpdate, function(err, r){
+              assert.equal(null, err);
+              assert.equal(1, r.matchedCount);
+              assert.equal(1, r.modifiedCount);
+            });
         }
       }
       else {
@@ -177,22 +229,6 @@ client.connect(function(err) {
       startButton: true
     });
   }
-
-  function renderScorePage(res, doc) {
-    let duration = doc.gameStop - doc.gameStart;
-    let durationSec = duration / 1000;
-    let score = (4 * 1000)-(durationSec * 100)-(doc.fail * 100);
-    // let durationText = new Date(duration);
-    res.render('score', {
-      start: doc.gameStart,
-      end: doc.gameStop,
-      miss: doc.fail,
-      durationSec: durationSec,
-      durationText: null,
-      score: score
-    });
-  }
-
 });
 
 app.listen(PORT, HOST);
